@@ -16,7 +16,11 @@ import {
 const ProductsContext = React.createContext();
 
 const initialState = {
-    isSidebarOpen: true,
+    isSidebarOpen: false,
+    products_loading: false, //when we call api that will fetch all products
+    products_error: false, //when we call api that will fetch all products
+    products: [], //populating products array when we call api that will fetch all products
+    featured_products: [], //filling featured products to showcase
 };
 
 export const ProductsProvider = ({ children }) => {
@@ -30,10 +34,16 @@ export const ProductsProvider = ({ children }) => {
     };
 
     const fetchProducts = async (url) => {
-        const response = await axios.get(url);
-        console.log('response: ', response);
+        try {
+            const response = await axios.get(url);
+            const products = response.data;
+            dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
+        } catch (error) {
+            dispatch({ type: GET_PRODUCTS_ERROR });
+        }
     };
     useEffect(() => {
+        dispatch({ type: GET_PRODUCTS_BEGIN });
         fetchProducts(url);
     }, []);
 
