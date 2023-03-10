@@ -33,7 +33,7 @@ const products_reducer = (state, action) => {
             ...state,
             products_loading: false,
             products: products,
-            featuredProducts: featuredProducts,
+            featured_products: featuredProducts,
         };
     }
 
